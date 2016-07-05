@@ -36,7 +36,7 @@ time.sleep(1)
 term = config.get('Search', 'string').replace(' ','+')
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + config.get('Search', 'lang') + "%2Fdefault")
 # Remove the strings different from our
-removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='Questa sezione spiega come installare la plugin e farla funzionare.') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
+removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + config.get('Search', 'find') + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
 result = client.execute_script(removeOtherStrings)
 # Force to open the link in another tab with a little hack in js
 addTarget = "var anchors = document.querySelectorAll('table td:nth-child(2) .meta a');for (var i=0; i<anchors.length; i++){anchors[i].setAttribute('target', '_blank');}"

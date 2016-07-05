@@ -34,7 +34,7 @@ Find 31 wrong strings
 25 - Switch to search-into-subcategories
 [...]
 ```
-Every switch means that the reject procedure works without problems
+Every switch means that the reject procedure works without problems!
 
 # Install
  
