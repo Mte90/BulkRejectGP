@@ -11,7 +11,7 @@ def logged_in(init):
             val = int(init)
         except:
             init = 0
-            if init < 20:
+            if init < 5:
                 init += 1
                 return logged_in(init)
             else:
@@ -25,7 +25,7 @@ def gp_success(init):
             val = int(init)
         except:
             init = 0
-            if init < 20:
+            if init < 5:
                 init += 1
                 return gp_success(init)
             else:
@@ -35,6 +35,12 @@ config = ConfigParser.RawConfigParser()
 config.readfp(open('config.ini'))
 client = Marionette(host='localhost', port=2828)
 client.start_session()
+# Detect if already logged
+try:
+    client.find_element(By.CSS_SELECTOR, 'body.logged-in')
+    client.navigate("https://translate.wordpress.org/wp-login.php?action=logout&redirect_to=https%3A%2F%2Ftranslate.wordpress.org%2F&_wpnonce=583839252e")
+except:
+    pass
 # Login
 client.navigate("https://login.wordpress.org/?redirect_to=https%3A%2F%2Ftranslate.wordpress.org%2F")
 #Log In Form
@@ -47,7 +53,7 @@ passwordLogin.send_keys(config.get('Login', 'pass'))
 # Click on the Log in button to connect
 client.find_element(By.ID, 'wp-submit').click()
 time.sleep(1)
-#Wait(client).until(logged_in)
+Wait(client).until(logged_in)
 # Move to the term
 term = config.get('Search', 'string').replace(' ','+')
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + config.get('Search', 'lang') + "%2Fdefault")
@@ -74,11 +80,10 @@ for openPage in openPages:
         i += 1
         print(str(i) + ' - Switch to ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
         client.find_element(By.CSS_SELECTOR, 'tr.preview .action.edit').click()
-        time.sleep(2)
-        # Reject the translation
         client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
-        Wait(client).until(gp_success)
+        # Reject the translation
         time.sleep(1)
+        Wait(client).until(gp_success)
         client.close()
         client.switch_to_window(original_window)
         # Repeat the process
