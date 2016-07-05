@@ -4,10 +4,16 @@ from marionette import Marionette
 from marionette_driver import By, Wait
 # Detect if user is logged
 def logged_in(init):
-    return client.find_element(By.CSS_SELECTOR, 'body.logged-in')
+    try:
+        return client.find_element(By.CSS_SELECTOR, 'body.logged-in')
+    except:
+        return logged_in(1)
 #  Detect if action have success
 def gp_success(init):
-    return client.find_element(By.CSS_SELECTOR, 'div.gp-js-success')
+    try:
+        return client.find_element(By.CSS_SELECTOR, 'div.gp-js-success')
+    except:
+        return gp_success(1)
 # Load configuration
 config = ConfigParser.RawConfigParser()
 config.readfp(open('config.ini'))
@@ -24,7 +30,8 @@ passwordLogin.click()
 passwordLogin.send_keys(config.get('Login', 'pass'))
 # Click on the Log in button to connect
 client.find_element(By.ID, 'wp-submit').click()
-Wait(client).until(logged_in)
+time.sleep(1)
+#Wait(client).until(logged_in)
 # Move to the term
 term = config.get('Search', 'string').replace(' ','+')
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + config.get('Search', 'lang') + "%2Fdefault")
@@ -51,13 +58,14 @@ for openPage in openPages:
         i += 1
         print(str(i) + ' - Switch to ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
         client.find_element(By.CSS_SELECTOR, 'tr.preview .action.edit').click()
+        time.sleep(2)
         # Reject the translation
         client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
-        print(client.get_url())
-        #Wait(client).until(gp_success)
-        client.close_chrome_window()
+        Wait(client).until(gp_success)
+        time.sleep(1)
+        client.close()
         client.switch_to_window(original_window)
-    print(client.get_url())
-    # Repeat the process
+        # Repeat the process
 # Force a logout
 client.navigate("https://translate.wordpress.org/wp-login.php?action=logout&redirect_to=https%3A%2F%2Ftranslate.wordpress.org%2F&_wpnonce=583839252e")
+print('Finished!')
