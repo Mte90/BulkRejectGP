@@ -7,13 +7,29 @@ def logged_in(init):
     try:
         return client.find_element(By.CSS_SELECTOR, 'body.logged-in')
     except:
-        return logged_in(1)
+        try:
+            val = int(init)
+        except:
+            init = 0
+            if init < 20:
+                init += 1
+                return logged_in(init)
+            else:
+                return true
 #  Detect if action have success
 def gp_success(init):
     try:
         return client.find_element(By.CSS_SELECTOR, 'div.gp-js-success')
     except:
-        return gp_success(1)
+        try:
+            val = int(init)
+        except:
+            init = 0
+            if init < 20:
+                init += 1
+                return gp_success(init)
+            else:
+                return true
 # Load configuration
 config = ConfigParser.RawConfigParser()
 config.readfp(open('config.ini'))
@@ -36,7 +52,7 @@ time.sleep(1)
 term = config.get('Search', 'string').replace(' ','+')
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + config.get('Search', 'lang') + "%2Fdefault")
 # Remove the strings different from our
-removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + config.get('Search', 'find') + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
+removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + config.get('Search', 'find').replace("'","\\'") + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
 result = client.execute_script(removeOtherStrings)
 # Force to open the link in another tab with a little hack in js
 addTarget = "var anchors = document.querySelectorAll('table td:nth-child(2) .meta a');for (var i=0; i<anchors.length; i++){anchors[i].setAttribute('target', '_blank');}"
