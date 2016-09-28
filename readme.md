@@ -1,4 +1,5 @@
 # Bulk Reject GP
+[![License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)   
 
 The Consistency tool of GlotPress is very useful to find string approved and in our case to find wrong approved strings.  
 The annoying part that they are all the same but it is a manual procedure, so you need to open every string and reject manually.  
