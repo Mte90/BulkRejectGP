@@ -44,7 +44,7 @@ Every switch means that the reject procedure works without problems!
 Get the Firefox nightly, set in about:config:
 ```
 marionette.defaultPrefs.enabled -> true
-marionette.defaultPrefs.port -> 2828
+marionette.defaultPrefs.port -> 28288
 ```
 
 Start Firefox nightly and create a `config.ini` file and execute the script.

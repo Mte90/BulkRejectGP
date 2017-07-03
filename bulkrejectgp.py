@@ -1,7 +1,9 @@
 #!/usr/bin/python
-import sys, ConfigParser, time
+import ConfigParser, time
 from marionette import Marionette
 from marionette_driver import By, Wait
+
+
 # Detect if user is logged
 def logged_in(init):
     try:
@@ -15,7 +17,9 @@ def logged_in(init):
                 init += 1
                 return logged_in(init)
             else:
-                return true
+                return True
+
+
 #  Detect if action have success
 def gp_success(init):
     try:
@@ -29,12 +33,15 @@ def gp_success(init):
                 init += 1
                 return gp_success(init)
             else:
-                return true
+                return True
+
 # Load configuration
 config = ConfigParser.RawConfigParser()
 config.readfp(open('config.ini'))
-client = Marionette(host='localhost', port=2828)
+print "Connection in progress to Firefox"
+client = Marionette(host='127.0.0.1', port=28288)
 client.start_session()
+print "Connection to Firefox Done"
 # Detect if already logged
 try:
     client.find_element(By.CSS_SELECTOR, 'body.logged-in')
@@ -43,19 +50,22 @@ except:
     pass
 # Login
 client.navigate("https://login.wordpress.org/?redirect_to=https%3A%2F%2Ftranslate.wordpress.org%2F")
-#Log In Form
-usernameLogin = client.find_element(By.ID, 'user_login')
-usernameLogin.click()
-usernameLogin.send_keys(config.get('Login', 'user'))
-passwordLogin = client.find_element(By.ID, 'user_pass')
-passwordLogin.click()
-passwordLogin.send_keys(config.get('Login', 'pass'))
-# Click on the Log in button to connect
-client.find_element(By.ID, 'wp-submit').click()
-time.sleep(1)
-Wait(client).until(logged_in)
+try:
+    #Log In Form
+    usernameLogin = client.find_element(By.ID, 'user_login')
+    usernameLogin.click()
+    usernameLogin.send_keys(config.get('Login', 'user'))
+    passwordLogin = client.find_element(By.ID, 'user_pass')
+    passwordLogin.click()
+    passwordLogin.send_keys(config.get('Login', 'pass'))
+    # Click on the Log in button to connect
+    client.find_element(By.ID, 'wp-submit').click()
+    time.sleep(1)
+    Wait(client).until(logged_in)
+except:
+    print "Already logged"
 # Move to the term
-term = config.get('Search', 'string').replace(' ','+')
+term = config.get('Search', 'string').replace(' ', '+')
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + config.get('Search', 'lang') + "%2Fdefault")
 # Remove the strings different from our
 removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + config.get('Search', 'find').replace("'","\\'") + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
@@ -66,7 +76,7 @@ result = client.execute_script(addTarget)
 # Open all the links
 openPages = client.find_elements(By.CSS_SELECTOR, 'table td:nth-child(2) .meta a')
 print('Find ' + str(len(openPages)) + ' wrong strings')
-i = 0;
+i = 0
 for openPage in openPages:
     original_window = client.current_window_handle
     openPage.click()
@@ -80,7 +90,7 @@ for openPage in openPages:
         i += 1
         print(str(i) + ' - Switch to ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
         client.find_element(By.CSS_SELECTOR, 'tr.preview .action.edit').click()
-        time.sleep(2)
+        time.sleep(1)
         client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
         # Reject the translation
         time.sleep(1)
