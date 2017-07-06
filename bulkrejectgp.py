@@ -75,7 +75,7 @@ addTarget = "var anchors = document.querySelectorAll('table td:nth-child(2) .met
 result = client.execute_script(addTarget)
 # Open all the links
 openPages = client.find_elements(By.CSS_SELECTOR, 'table td:nth-child(2) .meta a')
-print('Find ' + str(len(openPages)) + ' wrong strings')
+print('Find ' + str(len(openPages)) + ' wrong strings for ' + config.get('Search', 'string') + ' with -> ' + config.get('Search', 'find'))
 i = 0
 for openPage in openPages:
     original_window = client.current_window_handle
@@ -91,10 +91,14 @@ for openPage in openPages:
         print(str(i) + ' - Switch to ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
         client.find_element(By.CSS_SELECTOR, 'tr.preview .action.edit').click()
         time.sleep(1)
-        client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
-        # Reject the translation
-        time.sleep(1)
-        Wait(client).until(gp_success)
+        try:
+            client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
+            # Reject the translation
+            time.sleep(1)
+            Wait(client).until(gp_success)
+        except:
+            print(str(i) + ' - Not possible reject on ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
+
         client.close()
         client.switch_to_window(original_window)
         # Repeat the process
