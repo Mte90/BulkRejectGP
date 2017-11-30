@@ -39,15 +39,15 @@ Every switch means that the reject procedure works without problems!
 
 # Install
  
-```pip install marionette_client```
+```pip install marionette_driver```
 
-Get the Firefox nightly, set in about:config:
+Get the Firefox Nightly/Dev Edition, set in about:config:
 ```
 marionette.defaultPrefs.enabled -> true
 marionette.defaultPrefs.port -> 28288
 ```
 
-Start Firefox nightly and create a `config.ini` file and execute the script.
+Start Firefox Nightly and create a `config.ini` file and execute the script.
 
 # Credits
 

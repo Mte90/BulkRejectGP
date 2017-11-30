@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import ConfigParser, time
-from marionette import Marionette
+from marionette_driver.marionette import Marionette
 from marionette_driver import By, Wait
 
 
