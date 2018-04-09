@@ -2,7 +2,12 @@
 import ConfigParser, time
 from marionette_driver.marionette import Marionette
 from marionette_driver import By, Wait
+import subprocess
 
+
+def sendmessage(title, message):
+    subprocess.Popen(['notify-send', title, message])
+    return
 
 # Detect if user is logged
 def logged_in(init):
@@ -81,7 +86,7 @@ for openPage in openPages:
     original_window = client.current_window_handle
     openPage.click()
     # Wait page load, glotpress is very slow
-    time.sleep(2)
+    time.sleep(1.5)
     all_tab = client.window_handles
     if all_tab[-1] != original_window:
         # Switch to the tab opened
@@ -101,5 +106,6 @@ for openPage in openPages:
         client.switch_to_window(original_window)
         # Repeat the process
 # Force a logout
-client.navigate("https://translate.wordpress.org/wp-login.php?action=logout&redirect_to=https%3A%2F%2Ftranslate.wordpress.org%2F&_wpnonce=583839252e")
+client.navigate("https://translate.wordpress.org/wp-login.php?action=logout")
 print('Finished!')
+sendmessage('Finished bulk rejection', config.get('Search', 'find') + ' on ' + config.get('Search', 'string') + ' with ' + str(i) + ' removals')
