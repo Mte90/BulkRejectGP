@@ -89,8 +89,6 @@ for openPage in openPages:
         Wait(client).until(logged_in)
         i += 1
         print(str(i) + ' - Switch to ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
-        client.find_element(By.CSS_SELECTOR, 'tr.preview .action.edit').click()
-        time.sleep(1)
         try:
             client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
             # Reject the translation
