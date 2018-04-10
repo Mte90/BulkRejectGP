@@ -41,9 +41,9 @@ def gp_success(init):
                 return True
 
 parser = argparse.ArgumentParser(description='Bulk Reject translations on GlotPress with Firefox')
-parser.add_argument('-search', dest='search', action='store_true', help='The term with problems', required=True)
-parser.add_argument('-remove', dest='remove', action='store_true', help='The wrong translation to remove', required=True)
-parser.add_argument('-lang', dest='lang', action='store_true', help='The locale, eg: it', required=True)
+parser.add_argument('--search', dest='search', help='The term with problems', required=True, type=str)
+parser.add_argument('--remove', dest='remove', help='The wrong translation to remove', required=True, type=str)
+parser.add_argument('--lang', dest='lang', help='The locale, eg: it', default="it")
 args = parser.parse_args()
 # Load configuration
 config = ConfigParser.RawConfigParser()
