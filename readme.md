@@ -22,22 +22,11 @@ Find 31 wrong strings
 12 - Switch to Little Hippo
 13 - Switch to Add-custom-page-template
 14 - Switch to Mandrill WP - Email Form Under Post
-15 - Switch to WpCoolForm
-16 - Switch to Automated Cart Abandonment Campaign for WP eCommerce with Pre-built Emails
-17 - Switch to Post Shortcode
-18 - Switch to Semantic Shortcode
-19 - Switch to Exclude Category Widget                                                                                                                          
-20 - Switch to Push Notifications for WordPress (Lite)
-21 - Switch to Slimpack - Lightweight Jetpack
-22 - Switch to Push Notifications for WordPress (Lite)
-23 - Switch to Author Details
-24 - Switch to Master Currency WP
-25 - Switch to search-into-subcategories
 [...]
 ```
 Every switch means that the reject procedure works without problems!
 
-# Install
+## Install
  
 ```pip install marionette_driver```
 
@@ -47,8 +36,12 @@ marionette.defaultPrefs.enabled -> true
 marionette.defaultPrefs.port -> 28288
 ```
 
-Start Firefox Nightly and create a `config.ini` file and execute the script.
+Start Firefox Nightly and create a `config.ini` file and execute the scriptand put the user and password for wp.org of a PTE.
 
-# Credits
+## Execute
 
-Thanks to Manel Rhaiem for the example code for Marionette
+```./bulkrejectgp.py --search="Delete" --remove="cancella" -lang="it"```
+
+## Credits
+
+Thanks to Manel Rhaiem for the example code for Marionette.

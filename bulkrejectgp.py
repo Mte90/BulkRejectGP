@@ -114,4 +114,4 @@ for openPage in openPages:
 # Force a logout
 client.navigate("https://translate.wordpress.org/wp-login.php?action=logout")
 print('Finished!')
-sendmessage('Finished bulk rejection', args.search + ' on ' + args.remove + ' with ' + str(i) + ' removals')
+sendmessage('Finished Translate.WP.org bulk rejection', args.search + ' on ' + args.remove + ' with ' + str(i) + ' removals')
