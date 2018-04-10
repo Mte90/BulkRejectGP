@@ -3,7 +3,7 @@ import ConfigParser, time
 from marionette_driver.marionette import Marionette
 from marionette_driver import By, Wait
 import subprocess
-
+import argparse
 
 def sendmessage(title, message):
     subprocess.Popen(['notify-send', title, message])
@@ -40,6 +40,11 @@ def gp_success(init):
             else:
                 return True
 
+parser = argparse.ArgumentParser(description='Bulk Reject translations on GlotPress with Firefox')
+parser.add_argument('-search', dest='search', action='store_true', help='The term with problems', required=True)
+parser.add_argument('-remove', dest='remove', action='store_true', help='The wrong translation to remove', required=True)
+parser.add_argument('-lang', dest='lang', action='store_true', help='The locale, eg: it', required=True)
+args = parser.parse_args()
 # Load configuration
 config = ConfigParser.RawConfigParser()
 config.readfp(open('config.ini'))
@@ -70,17 +75,18 @@ try:
 except:
     print "Already logged"
 # Move to the term
-term = config.get('Search', 'string').replace(' ', '+')
-client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + config.get('Search', 'lang') + "%2Fdefault")
+term = args.search
+term = term.replace(' ', '+')
+client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + args.lang + "%2Fdefault")
 # Remove the strings different from our
-removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + config.get('Search', 'find').replace("'","\\'") + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
+removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + args.remove.replace("'","\\'") + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
 result = client.execute_script(removeOtherStrings)
 # Force to open the link in another tab with a little hack in js
 addTarget = "var anchors = document.querySelectorAll('table td:nth-child(2) .meta a');for (var i=0; i<anchors.length; i++){anchors[i].setAttribute('target', '_blank');}"
 result = client.execute_script(addTarget)
 # Open all the links
 openPages = client.find_elements(By.CSS_SELECTOR, 'table td:nth-child(2) .meta a')
-print('Find ' + str(len(openPages)) + ' wrong strings for ' + config.get('Search', 'string') + ' with -> ' + config.get('Search', 'find'))
+print('Find ' + str(len(openPages)) + ' wrong strings for ' + args.search + ' with -> ' + args.remove)
 i = 0
 for openPage in openPages:
     original_window = client.current_window_handle
@@ -108,4 +114,4 @@ for openPage in openPages:
 # Force a logout
 client.navigate("https://translate.wordpress.org/wp-login.php?action=logout")
 print('Finished!')
-sendmessage('Finished bulk rejection', config.get('Search', 'find') + ' on ' + config.get('Search', 'string') + ' with ' + str(i) + ' removals')
+sendmessage('Finished bulk rejection', args.search + ' on ' + args.remove + ' with ' + str(i) + ' removals')
