@@ -27,20 +27,23 @@ Find 31 wrong strings
 Every switch means that the reject procedure works without problems!
 
 ## Install
- 
-```pip install marionette_driver```
 
-Get the Firefox Nightly/Dev Edition, set in about:config:
+Marionette installation is mandatory 
 ```
-marionette.defaultPrefs.enabled -> true
-marionette.defaultPrefs.port -> 28288
+pip install marionette_driver
 ```
 
-Start Firefox Nightly and create a `config.ini` file and execute the scriptand put the user and password for wp.org of a PTE.
+Get the Firefox Nightly/Dev Edition, set in about:config tab:
+```
+marionette.enabled -> true
+marionette.port -> 28288
+```
+
+Create a `config.ini` file, starting from `config-sample.ini`, and put the username and password for wp.org of a PTE.
 
 ## Execute
 
-```./bulkrejectgp.py --search="Delete" --remove="cancella" -lang="it"```
+```./bulkrejectgp.py --search="Delete" --remove="cancella" --lang="it"```
 
 ## Credits
 
