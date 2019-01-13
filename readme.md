@@ -43,8 +43,12 @@ Create a `config.ini` file, starting from `config-sample.ini`, and put the usern
 
 ## Execute
 
-```./bulkrejectgp.py --search="Delete" --remove="cancella" --lang="it"```
+```./bulkrejectgp.py --search="Delete" --remove="cancella" --replace="Elimina" --lang="it"```
+
+Please note that the `replace` is optional! It is intended to be used when you don't only want to reject the string, but you also want to suggest a new one.
 
 ## Credits
 
 Thanks to Manel Rhaiem for the example code for Marionette.
+
+Thanks to [G. Allegretta](https://github.com/gAllegr) for the replace option.

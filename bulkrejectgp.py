@@ -43,6 +43,7 @@ def gp_success(init):
 parser = argparse.ArgumentParser(description='Bulk Reject translations on GlotPress with Firefox')
 parser.add_argument('--search', dest='search', help='The term with problems', required=True, type=str)
 parser.add_argument('--remove', dest='remove', help='The wrong translation to remove', required=True, type=str)
+parser.add_argument('--replace', dest='replace', help='The new translation to submit', required=False, type=str)
 parser.add_argument('--lang', dest='lang', help='The locale, eg: it', default="it")
 args = parser.parse_args()
 # Load configuration
@@ -88,6 +89,7 @@ result = client.execute_script(addTarget)
 openPages = client.find_elements(By.CSS_SELECTOR, 'table td:nth-child(2) .meta a')
 print('Find ' + str(len(openPages)) + ' wrong strings for ' + args.search + ' with -> ' + args.remove)
 i = 0
+j = 0
 for openPage in openPages:
     original_window = client.current_window_handle
     openPage.click()
@@ -105,6 +107,18 @@ for openPage in openPages:
             # Reject the translation
             time.sleep(1)
             Wait(client).until(gp_success)
+            # If a replacing translation is set, submit it
+            if args.replace:
+                try:
+                    client.find_element(By.CSS_SELECTOR, '.action.edit').click();
+                    time.sleep(1)
+                    client.find_element(By.CSS_SELECTOR, '.textareas').find_element(By.CSS_SELECTOR, '.foreign-text').clear()
+                    client.find_element(By.CSS_SELECTOR, '.textareas').find_element(By.CSS_SELECTOR, '.foreign-text').send_keys(args.replace)
+                    client.find_element(By.CSS_SELECTOR, 'button.ok').click()
+                    Wait(client).until(gp_success)
+                    j += 1
+                except:
+                    print(str(i) + ' - Not possible submit new string on ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
         except:
             print(str(i) + ' - Not possible reject on ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
 
@@ -114,4 +128,7 @@ for openPage in openPages:
 # Force a logout
 client.navigate("https://translate.wordpress.org/wp-login.php?action=logout")
 print('Finished!')
-sendmessage('Finished Translate.WP.org bulk rejection', args.search + ' on ' + args.remove + ' with ' + str(i) + ' removals')
+if args.replace is None:
+    sendmessage('Finished Translate.WP.org bulk rejection', args.search + ' on ' + args.remove + ' with ' + str(i) + ' removals')
+else:
+    sendmessage('Finished Translate.WP.org bulk rejection', args.search + ' on ' + args.remove + ' with ' + str(j) + ' replaces')
