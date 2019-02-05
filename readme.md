@@ -47,8 +47,53 @@ Create a `config.ini` file, starting from `config-sample.ini`, and put the usern
 
 Please note that the `replace` is optional! It is intended to be used when you don't only want to reject the string, but you also want to suggest a new one.
 
+## Massive Bulk Rejection
+### Use case
+Bulk reject is really good to clear/replace **ONE** string, but consider the following case as example.
+
+The Italian polyglots team decide to unify the translation of the string "_Sorry, but nothing matched your search terms. Please try again with some different keywords._".
+
+That was the situation, according to the Consistency:
+![Consistency screenshot](./images/consistency.png)
+
+Good luck feeding the command terminal 16 or 17 times to launch the bulkreject command!!!
+
+Wouldn't be awesome to fill in a simple text file and then launch a huge bulk reject?!? (_One command to clear them all!_)
+
+### One text file to clear them all!
+The sample text file is the `string-sample.json` one. Keep it untouched for further reference and create a copy named `strings.json`.
+
+Set your language using your locale code
+````json
+"lang": "it"
+````
+Then fill in the `commands` property, which contains the single commands.
+````json
+"commands": [
+        {
+            "search": "String to be fixed",
+            "remove": "String to be removed",
+            "replace": "String to be replaced"
+        },
+        {
+            "search": "String to be fixed",
+            "remove": "String to be removed",
+            "replace": "String to be replaced"
+        }
+]
+````
+Add more commands by simple copy-paste the `search`, `remove` and `replace` array element. Remember to separate each single command property with a colon ( _,_ ).
+
+If you don't want to replace a string, just leave the property empty.
+````json
+"replace": ""
+````
+
+### Execute!
+```./massive-bulkrejectgp.py```
+
 ## Credits
 
 Thanks to Manel Rhaiem for the example code for Marionette.
 
-Thanks to [G. Allegretta](https://github.com/gAllegr) for the replace option.
+Thanks to [G. Allegretta](https://github.com/gAllegr) for the replace option and the massive bulkrejection option.

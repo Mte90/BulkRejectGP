@@ -1,0 +1,15 @@
+{
+    "lang": "your_locale_code_here",
+    "commands": [
+        {
+            "search": "String to be fixed",
+            "remove": "String to be removed",
+            "replace": "String to be replaced"
+        },
+        {
+            "search": "String to be fixed",
+            "remove": "String to be removed",
+            "replace": "String to be replaced"
+        }
+    ]
+}
