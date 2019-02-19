@@ -4,6 +4,8 @@ from marionette_driver.marionette import Marionette
 from marionette_driver import By, Wait
 import subprocess
 import argparse
+import urllib
+import cgi
 
 def sendmessage(title, message):
     subprocess.Popen(['notify-send', title, message])
@@ -77,10 +79,12 @@ except:
     print "Already logged"
 # Move to the term
 term = args.search
-term = term.replace(' ', '+')
+# encode the term and change the space ('%20') in a '+'
+term = urllib.quote_plus(term, safe='')
+
 client.navigate("https://translate.wordpress.org/consistency?search=" + term + "&set=" + args.lang + "%2Fdefault")
 # Remove the strings different from our
-removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + args.remove.replace("'","\\'") + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
+removeOtherStrings = "var right = document.querySelectorAll('table td:nth-child(2) .string');for (var i=0; i<right.length; i++){if(right[i].innerHTML!=='" + cgi.escape(args.remove.replace("'","\\'")) + "') {td = right[i].parentNode;tr = td.parentNode;tr.outerHTML=''}}"
 result = client.execute_script(removeOtherStrings)
 # Force to open the link in another tab with a little hack in js
 addTarget = "var anchors = document.querySelectorAll('table td:nth-child(2) .meta a');for (var i=0; i<anchors.length; i++){anchors[i].setAttribute('target', '_blank');}"
