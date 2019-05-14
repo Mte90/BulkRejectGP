@@ -107,7 +107,7 @@ for openPage in openPages:
         i += 1
         print(str(i) + ' - Switch to ' + client.find_element(By.CSS_SELECTOR, '.breadcrumb li:nth-child(3)').text)
         try:
-            client.find_element(By.CSS_SELECTOR, 'dd button.reject').click()
+            client.find_element(By.CSS_SELECTOR, 'button.reject').click()
             # Reject the translation
             time.sleep(1)
             Wait(client).until(gp_success)
@@ -116,9 +116,9 @@ for openPage in openPages:
                 try:
                     client.find_element(By.CSS_SELECTOR, '.action.edit').click();
                     time.sleep(1)
-                    client.find_element(By.CSS_SELECTOR, '.textareas').find_element(By.CSS_SELECTOR, '.foreign-text').clear()
-                    client.find_element(By.CSS_SELECTOR, '.textareas').find_element(By.CSS_SELECTOR, '.foreign-text').send_keys(args.replace)
-                    client.find_element(By.CSS_SELECTOR, 'button.ok').click()
+                    client.find_element(By.CSS_SELECTOR, 'textarea.foreign-text').clear()
+                    client.find_element(By.CSS_SELECTOR, 'textarea.foreign-text').send_keys(args.replace)
+                    client.find_element(By.CSS_SELECTOR, 'button.translation-actions__save.with-tooltip').click()
                     Wait(client).until(gp_success)
                     j += 1
                 except:
