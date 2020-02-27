@@ -51,10 +51,10 @@ args = parser.parse_args()
 # Load configuration
 config = ConfigParser.RawConfigParser()
 config.readfp(open('config.ini'))
-print "Connection in progress to Firefox"
+print("Connection in progress to Firefox")
 client = Marionette(host='127.0.0.1', port=28288)
 client.start_session()
-print "Connection to Firefox Done"
+print("Connection to Firefox Done")
 # Detect if already logged
 try:
     client.find_element(By.CSS_SELECTOR, 'body.logged-in')
